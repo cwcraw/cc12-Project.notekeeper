@@ -2,7 +2,8 @@
 
 module.exports = knex => {
   return {
-    createTask: require("./createTask")(knex)
+    createTask: require("./createTask")(knex),
+    list: require("./list.js")(knex)
     //list: require("./list")(knex, Channel),
   };
 };
