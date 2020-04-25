@@ -3,8 +3,6 @@ const graphqlHTTP = require("express-graphql");
 const { buildSchema } = require("graphql");
 const config = require("../config");
 const knex = require("knex")(config.db);
-// mock data [Structure like in Pokemon]
-const data = require("./data");
 const todo = require("../models/todo")(knex);
 
 const schema = buildSchema(`
@@ -32,8 +30,9 @@ const schema = buildSchema(`
 // The root provides the resolver functions for each type of query or mutation.
 const root = {
   //read
-  tasklist: () => {
-    return data.tasks;
+  tasklist: async () => {
+    let output = await todo.list();
+    return output;
   },
 
   //create
@@ -41,6 +40,7 @@ const root = {
     let newTask = {};
     // newTask.id = request.id
     newTask.start_date = new Date().toDateString();
+    // newTask.start_date = newTask.start_date.toDateString()
     newTask.due_date = new Date().toDateString();
     newTask.finished = false;
     newTask.desc = request.desc;
@@ -50,43 +50,46 @@ const root = {
     newTask.id = outputId[0];
     return newTask;
   },
+
   // update
-  toggleDone: request => {
+  toggleDone: async request => {
     let updatedTask;
-    data.tasks.map(task => {
+    let list = await todo.list();
+    await list.map(async task => {
       if (task.id === parseInt(request.id)) {
-        task.finished = !task.finished;
         updatedTask = task;
       }
     });
+    updatedTask = await todo.toggleDone(updatedTask);
     return updatedTask;
   },
 
-  updateDueDate: request => {
+  updateDueDate: async request => {
     let date;
     let fromNow = request.fromNow;
     let updatedTask;
-    data.tasks.map(task => {
+    let list = await todo.list();
+    list.map(task => {
       if (task.id === parseInt(request.id)) {
-        date = new Date(task.due_date);
-        task.due_date = new Date(
-          date.setDate(date.getDate() + fromNow)
-        ).toDateString();
         updatedTask = task;
       }
     });
+    updatedTask = await todo.updateDueDate(fromNow, updatedTask);
     return updatedTask;
   },
   // Delette
-  clearDoneTasks: request => {
-    data.tasks = data.tasks.filter(task => task.finished === false);
-    return data.tasks;
+  clearDoneTasks: async request => {
+    let list = await todo.list();
+    listFinished = list.filter(task => task.finished === true);
+    let output = await todo.clearDoneTasks(listFinished);
+    return listFinished;
   },
 
-  clearOneTask: request => {
-    data.tasks = data.tasks.filter(task => task.id !== parseInt(request.id));
-    console.log(data.tasks);
-    return data.tasks;
+  clearOneTask: async request => {
+    let list = await todo.list();
+    list = list.filter(task => task.id !== parseInt(request.id));
+    await todo.clearOneTask(request.id);
+    return list;
   }
 };
 

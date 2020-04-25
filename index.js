@@ -1,5 +1,6 @@
-const express = require("express");
-const graphqlHTTP = require("express-graphql");
-const { buildSchema } = require("graphql");
-
-// const data = require("./data");
+document.addEventListener("DOMContentLoaded", () => {
+  const taskList = document.createElement("div");
+  taskList.id = "taskList";
+  // taskList.innerHTML =
+  document.body.append(taskList);
+});
