@@ -1,9 +1,11 @@
 const express = require("express");
 const graphqlHTTP = require("express-graphql");
 const { buildSchema } = require("graphql");
+const config = require("../config");
+const knex = require("knex")(config.db);
 // mock data [Structure like in Pokemon]
 const data = require("./data");
-const todo = require("../models/todo");
+const todo = require("../models/todo")(knex);
 
 const schema = buildSchema(`
   type Query {
@@ -11,7 +13,7 @@ const schema = buildSchema(`
   }
 
   type Mutation {
-    addTask(id:ID!,start_date: String,due_date: String,finished: Boolean, desc: String): task
+    createTask(id:ID,start_date: String,due_date: String,finished: Boolean, desc: String): task
     toggleDone(id: ID): task
     updateDueDate(id: ID, fromNow: Int): task
     clearDoneTasks: [task]
@@ -35,15 +37,17 @@ const root = {
   },
 
   //create
-  addTask: request => {
+  createTask: async request => {
     let newTask = {};
-    newTask.id = request.id;
+    // newTask.id = request.id
     newTask.start_date = new Date().toDateString();
     newTask.due_date = new Date().toDateString();
     newTask.finished = false;
     newTask.desc = request.desc;
     data.tasks.push(newTask);
-    let test = todo.create(newTask);
+    let outputId = await todo.createTask(newTask);
+    console.log(outputId);
+    newTask.id = outputId[0];
     return newTask;
   },
   // update

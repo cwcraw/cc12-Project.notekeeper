@@ -15,7 +15,7 @@ exports.up = function(knex, Promise) {
       .notNullable()
       .defaultTo(false);
 
-    t.string("Desc", 40) // maximum length of 15 characters
+    t.string("desc", 40) // maximum length of 15 characters
       .notNullable() // add a not-null constraint to this column
       .index(); // index it
   });
