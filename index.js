@@ -1,6 +1,39 @@
-document.addEventListener("DOMContentLoaded", () => {
+const query = `{
+      tasklist{
+        id
+        start_date
+        due_date
+        finished
+        desc
+        
+      }
+    }`
+
+const uri = "/graphql"
+document.addEventListener("DOMContentLoaded", async () => {
   const taskList = document.createElement("div");
   taskList.id = "taskList";
-  taskList.innerHTML = console.log(taskList); //localhost:4000/graphql?query=%7B%20tasklist%7B%0A%20%20id%0A%7D%0A%7D
+  console.log(uri)
+  let tasks = await fetch("http://localhost:4000/graphql",
+    {
+      method: 'POST',
+      headers: {"Content-Type" : "application/json"},
+      // mode: 'no-cors',
+      body: JSON.stringify({
+        query: `
+      query { 
+        tasklist {
+        id
+        desc
+        }
+      }
+      `
+      })
+    })
+  tasks = await tasks.json()
+  console.log(tasks.data.tasklist)
+  taskList.innerHTML = tasks.data.tasklist[0].desc
   document.body.append(taskList);
+
 });
+
