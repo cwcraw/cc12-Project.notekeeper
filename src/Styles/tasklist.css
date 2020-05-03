@@ -1,0 +1,30 @@
+#TaskList{
+    max-width: 100%;
+    display: flex;
+    justify-content: space-between;
+    background-color: brown
+}
+
+#list{
+    display: block;
+}
+
+#task {
+    display: inline-block;
+    margin: 10px;
+    outline: 1px solid black;
+    color: teal
+    
+}
+
+#taskDesc{
+    display: block;
+}
+
+#taskDueDate{
+    display: block;
+}
+
+#submitButton{
+    display: block;
+}

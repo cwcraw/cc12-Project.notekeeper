@@ -10,7 +10,8 @@
     "migrate": "knex migrate:latest --knexfile models/knexfile.js",
     "rollback": "knex migrate:rollback --knexfile models/knexfile.js ",
     "precommit": "pretty-quick --staged",
-    "dev": "nodemon server/index.js"
+    "dev": "nodemon server/index.js",
+    "react": "react-scripts start"
   },
   "author": "Code Chrysalis",
   "license": "UNLICENSED",
@@ -27,11 +28,14 @@
     "moment": "^2.22.2",
     "morgan": "^1.9.1",
     "nodemon": "^2.0.3",
-    "pg": "^7.5.0"
+    "pg": "^7.5.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-scripts": "^3.4.1"
   },
   "devDependencies": {
     "chai": "^4.0.2",
-    "eslint": "^5.7.0",
+    "eslint": "^6.8.0",
     "eslint-config-prettier": "^3.1.0",
     "eslint-config-problems": "^1.1.0",
     "eslint-plugin-prettier": "^3.0.0",
@@ -39,5 +43,17 @@
     "prettier": "^1.12.1",
     "pretty-quick": "^1.4.1",
     "sqlite3": "^4.0.9"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
