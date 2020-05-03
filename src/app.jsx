@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import TitleBar from "./Components/titleBar.jsx"
 import TaskList from "./Components/tasklist.jsx"
+import NewTask from "./Components/newTask.jsx"
 import query from "./query.js"
 
 //Need to get data from the database
@@ -9,18 +10,20 @@ export default function App() {
     const [taskList, setTaskList]=useState('empty')
 
   
-
+    // eslint-disable-next-line
     useEffect(() => {getList()},[])
-
+    console.log(taskList)
+    
     return (
         <div className = "App">
             <TitleBar />
+            <NewTask/>
             <TaskList 
             list = {taskList}
+            setTaskList = {setTaskList}
             />
         </div>
     )
-
 // FUNCTION JUNCTION 
 
 function taskPrettifier(task) {
@@ -28,11 +31,7 @@ function taskPrettifier(task) {
     output.id=task.id
     output.Start = new Date(parseInt(task.start_date)).toDateString()
     output.Due = new Date(parseInt(task.due_date)).toDateString()
-    if(task.finished){
-      output.Status = 'Great Job!'
-    } else {
-      output.Status = 'You can do it!'
-    }
+    output.Status = task.finished
     output.Task = task.desc
     return output
   }

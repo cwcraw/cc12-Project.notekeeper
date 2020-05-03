@@ -2,7 +2,6 @@ import React from "react";
 import "../Styles/tasklist.css"
 import query from "../query.js"
 
-
 export default function TaskList(props) {
     let output = [ <div id = 'list'>
         <div id = 'task'>
@@ -19,7 +18,7 @@ export default function TaskList(props) {
         </div>
     </div>]
     for(let i = 0; i < props.list.length; i++){
-        console.log(props.list[i])
+        if(props.list[i].Status) {
         output.push(
             <div
                 id = 'list'
@@ -28,13 +27,9 @@ export default function TaskList(props) {
                 {props.list[i].Task}
                 </div>
                 <div id = 'task'
-                 onClick={e => {
-                    console.log(props.list[i].id);
-                    toggleDone(props.list[i].id);
-                    console.log(e)
-                }}
+                 onClick={e => toggleDoneFE(i,props.list,props.setTaskList)}
                 >
-                {props.list[i].Status}
+                Good Job!
                 </div>
                 <div id = 'task'>
                 {props.list[i].Start}
@@ -47,16 +42,46 @@ export default function TaskList(props) {
             </div>
         )
     }
+    else {output.push(
+        <div
+            id = 'list'
+        >
+            <div id = 'task'>
+            {props.list[i].Task}
+            </div>
+            <div id = 'task'
+             onClick={e => toggleDoneFE(i,props.list,props.setTaskList)}
+            >
+            Keep Going!
+            </div>
+            <div id = 'task'>
+            {props.list[i].Start}
+            </div>
+            <div id = 'task'>
+            {props.list[i].Due}
+
+            </div>
+
+        </div>
+    )
+
+    }
+}
     return output
 }
 
 
 //function Junction
 
-async function toggleDone(id) {
+function toggleDoneFE(i,list, setTaskList) {
+        toggleDoneDB(list[i].id);
+        list[i].Status = !list[i].Status
+        setTaskList(tasks => [...tasks])
+}
+
+async function toggleDoneDB(id) {
     const uri = "http://localhost:4000/graphql"
-    console.log(id)
-    let toggle = await fetch(uri,
+    await fetch(uri,
         {
             method: 'POST',
             headers: {"Content-Type" : "application/json"},
@@ -64,6 +89,5 @@ async function toggleDone(id) {
             query: query.toggleDone
             }).replace("$id",id)
         })
-    toggle = await toggle.json()
-    console.log(toggle)
+    // await toggle.json()
 }

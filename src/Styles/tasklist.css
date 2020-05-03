@@ -16,3 +16,15 @@
     color: teal
     
 }
+
+#taskDesc{
+    display: block;
+}
+
+#taskDueDate{
+    display: block;
+}
+
+#submitButton{
+    display: block;
+}
