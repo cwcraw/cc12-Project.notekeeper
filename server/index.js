@@ -103,8 +103,8 @@ const app = express();
   or Apollo-Client. Note below where the schema and resolvers are connected. Setting graphiql
   to 'true' gives you an in-browser explorer to test your queries.
 */
-app.use(express.static('/server '));
 app.use(cors())
+app.use(express.static('/server '));
 app.use(
   "/graphql",
   graphqlHTTP({
